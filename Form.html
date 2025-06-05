@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario de Registro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Formulario de Registro</h2>
+  <form id="formulario">
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" readonly>
+
+    <label for="turno">Turno:</label>
+    <select id="turno" name="turno" required>
+      <option value="">Selecciona un turno</option>
+      <option value="Turno 1">Turno 1</option>
+      <option value="Turno 2">Turno 2</option>
+      <option value="Turno 3">Turno 3</option>
+    </select>
+
+    <label for="linea">Línea:</label>
+    <input type="text" id="linea" name="linea" required>
+
+    <label for="let">Let:</label>
+    <input type="text" id="let" name="let" required>
+
+    <label for="presentacion">Presentación:</label>
+    <select id="presentacion" name="presentacion" required>
+      <option value="">Selecciona una presentación</option>
+      <option value="Presentación 1">Presentación 1</option>
+      <option value="Presentación 2">Presentación 2</option>
+      <option value="Presentación 3">Presentación 3</option>
+    </select>
+
+    <button type="submit">Guardar</button>
+  </form>
+
+  <script>
+    // Fecha automática
+    document.getElementById("fecha").valueAsDate = new Date();
+
+    const form = document.getElementById("formulario");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+
+      fetch("https://script.google.com/macros/s/AKfycbwGjgfxgWL_fNsqbMLZt2cc0WzewO7KxGBKIQAiEfX2FhwpgXT_X85GH2hdS1FoNdg/exec", 
+      {
+        method: "POST",
+        body: data
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert("Formulario enviado correctamente.");
+        form.reset();
+        document.getElementById("fecha").valueAsDate = new Date(); // Restaurar fecha
+      })
+      .catch(error => {
+        alert("Hubo un error al enviar el formulario.");
+        console.error("Error:", error);
+      });
+    });
+  </script>
+
+</body>
+</html>
