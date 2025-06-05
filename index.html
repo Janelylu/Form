@@ -2,51 +2,45 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Registro de Datos</title>
+  <title>Formulario de Registro</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    form {
       max-width: 400px;
-      margin: auto;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
     }
-    label, select, input {
+    label {
       display: block;
+      margin-top: 15px;
+    }
+    input, select, button {
       width: 100%;
-      margin-bottom: 15px;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
     button {
-      padding: 10px;
-      width: 100%;
-      background-color: #28a745;
+      background-color: #4CAF50;
       color: white;
       border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    .msg {
-      margin-top: 15px;
-      text-align: center;
-      font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
   <h2>Formulario de Registro</h2>
-
-  <form id="registro-form">
-    <label>Fecha:</label>
-    <input type="text" id="fecha" name="fecha" readonly>
+  <form id="formulario">
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" readonly>
 
     <label for="turno">Turno:</label>
     <select id="turno" name="turno" required>
-      <option value="">Seleccione un turno</option>
+      <option value="">Selecciona un turno</option>
       <option value="Turno 1">Turno 1</option>
       <option value="Turno 2">Turno 2</option>
       <option value="Turno 3">Turno 3</option>
@@ -60,44 +54,43 @@
 
     <label for="presentacion">Presentación:</label>
     <select id="presentacion" name="presentacion" required>
-      <option value="">Seleccione presentación</option>
+      <option value="">Selecciona una presentación</option>
       <option value="Presentación 1">Presentación 1</option>
       <option value="Presentación 2">Presentación 2</option>
       <option value="Presentación 3">Presentación 3</option>
     </select>
 
-    <button type="submit">Enviar</button>
-    <div class="msg" id="mensaje"></div>
+    <button type="submit">Guardar</button>
   </form>
 
   <script>
-    // Insertar la fecha actual automáticamente
-    document.getElementById("fecha").value = new Date().toLocaleDateString('es-MX');
+    // Fecha automática
+    document.getElementById("fecha").valueAsDate = new Date();
 
-    document.getElementById("registro-form").addEventListener("submit", function(e) {
+    const form = document.getElementById("formulario");
+
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const data = new FormData(this);
+      const data = new FormData(form);
 
-      fetch("https://script.google.com/macros/s/AKfycbwGjgfxgWL_fNsqbMLZt2cc0WzewO7KxGBKIQAiEfX2FhwpgXT_X85GH2hdS1FoNdg/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwGjgfxgWL_fNsqbMLZt2cc0WzewO7KxGBKIQAiEfX2FhwpgXT_X85GH2hdS1FoNdg/exec", 
+      {
         method: "POST",
-        body: data,
+        body: data
       })
       .then(response => response.text())
-      .then(text => {
-        if (text.trim() === "OK") {
-          document.getElementById("mensaje").innerText = "Formulario enviado correctamente.";
-          document.getElementById("registro-form").reset();
-          document.getElementById("fecha").value = new Date().toLocaleDateString('es-MX');
-        } else {
-          document.getElementById("mensaje").innerText = "Error al enviar: " + text;
-        }
+      .then(result => {
+        alert("Formulario enviado correctamente.");
+        form.reset();
+        document.getElementById("fecha").valueAsDate = new Date(); // Restaurar fecha
       })
       .catch(error => {
-        document.getElementById("mensaje").innerText = "Hubo un error al enviar el formulario.";
-        console.error(error);
+        alert("Hubo un error al enviar el formulario.");
+        console.error("Error:", error);
       });
     });
   </script>
+
 </body>
 </html>
